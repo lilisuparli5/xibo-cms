@@ -235,7 +235,13 @@ export default function Displays() {
 
   const selectedDisplay = displayList.find((d) => d.displayId === selectedDisplayId) ?? null;
 
-  const handleRefresh = () => queryClient.invalidateQueries({ queryKey: ['display'] });
+  const handleRefresh = async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['display'] }),
+      queryClient.invalidateQueries({ queryKey: ['displayMap'] }),
+      queryClient.invalidateQueries({ queryKey: ['cameraMap'] }),
+    ]);
+  };
 
   const {
     isDeleting,

@@ -1284,7 +1284,7 @@ export default function EditDisplayModal({
                 helpText={t('The Latitude of this display')}
                 placeholder=" "
                 value={draft.latitude ?? undefined}
-                onChange={(v) => set('latitude', v || null)}
+                onChange={(v) => set('latitude', v ?? null)}
                 error={fieldErrors.latitude}
               />
               <NumberInput
@@ -1293,7 +1293,7 @@ export default function EditDisplayModal({
                 helpText={t('The Longitude of this Display')}
                 placeholder=" "
                 value={draft.longitude ?? undefined}
-                onChange={(v) => set('longitude', v || null)}
+                onChange={(v) => set('longitude', v ?? null)}
                 error={fieldErrors.longitude}
               />
               <TimezoneSelect
