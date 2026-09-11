@@ -792,8 +792,8 @@ class Display extends Base
                 ) . '?' . Random::generateString();
             }
 
-            $longitude = ($display->longitude) ?: $this->getConfig()->getSetting('DEFAULT_LONG');
-            $latitude =  ($display->latitude) ?: $this->getConfig()->getSetting('DEFAULT_LAT');
+            $longitude = $display->longitude ?? $this->getConfig()->getSetting('DEFAULT_LONG');
+            $latitude = $display->latitude ?? $this->getConfig()->getSetting('DEFAULT_LAT');
 
             $geo = new Point([(double)$longitude, (double)$latitude]);
 

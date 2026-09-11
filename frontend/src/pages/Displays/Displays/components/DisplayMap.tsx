@@ -25,7 +25,7 @@ import 'leaflet-easyprint';
 import 'leaflet-fullscreen';
 import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import { Maximize2, Minus, Plus, Printer } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import 'leaflet/dist/leaflet.css';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +36,8 @@ import '@/styles/leaflet-overrides.css';
 import 'react-leaflet-cluster/dist/assets/MarkerCluster.css';
 
 import type { DisplayFilterInput } from '../DisplaysConfig';
+
+import CameraLayer from './CameraLayer';
 
 import { withPublicPath } from '@/config/publicPath';
 import { useUserContext } from '@/context/UserContext';
@@ -362,7 +364,7 @@ export default function DisplayMap({ filters, folderId }: DisplayMapProps) {
   };
 
   const [bounds, setBounds] = useState<string | null>(null);
-  const handleBoundsChange = (b: string) => setBounds(b);
+  const handleBoundsChange = useCallback((b: string) => setBounds(b), []);
 
   const { data, isFetching, isError } = useQuery({
     queryKey: ['displayMap', filters, folderId, bounds],
@@ -373,6 +375,7 @@ export default function DisplayMap({ filters, folderId }: DisplayMapProps) {
         bounds: bounds ?? undefined,
       }),
     staleTime: 30_000,
+    refetchInterval: 30_000,
     enabled: bounds !== null,
     placeholderData: keepPreviousData,
   });
@@ -508,6 +511,7 @@ export default function DisplayMap({ filters, folderId }: DisplayMapProps) {
         </MarkerClusterGroup>
 
         <MapControls tileLayer={tileLayer} />
+        <CameraLayer key={folderId ?? 'all'} folderId={folderId} />
         <BoundsTracker onBoundsChange={handleBoundsChange} />
         <ClusterEventHandler clusterGroup={clusterGroup} />
       </MapContainer>

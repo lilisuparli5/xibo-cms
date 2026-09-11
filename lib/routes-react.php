@@ -31,6 +31,18 @@ use Slim\Routing\RouteCollectorProxy;
 use Xibo\Middleware\FeatureAuth;
 use Xibo\Middleware\SuperAdminAuth;
 
+$app->group('/monitoringcamera', function (RouteCollectorProxy $group) {
+    $group->get('/map', ['\Xibo\Controller\MonitoringCamera', 'map'])->setName('monitoringcamera.map');
+    $group->get('/{id:[0-9]+}/playback', ['\Xibo\Controller\MonitoringCamera', 'playback'])
+        ->setName('monitoringcamera.playback');
+})->addMiddleware(new FeatureAuth($app->getContainer(), ['displays.view']));
+
+$app->group('/monitoringcamera', function (RouteCollectorProxy $group) {
+    $group->post('', ['\Xibo\Controller\MonitoringCamera', 'save'])->setName('monitoringcamera.add');
+    $group->put('/{id:[0-9]+}', ['\Xibo\Controller\MonitoringCamera', 'save'])->setName('monitoringcamera.edit');
+    $group->delete('/{id:[0-9]+}', ['\Xibo\Controller\MonitoringCamera', 'delete'])->setName('monitoringcamera.delete');
+})->addMiddleware(new FeatureAuth($app->getContainer(), ['displays.modify']));
+
 //
 // Schedule
 //
